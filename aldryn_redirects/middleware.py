@@ -9,6 +9,12 @@ from .models import Redirect, StaticRedirect
 
 
 class RedirectFallbackMiddleware(object):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        return self.get_response(request)
+
     def process_request(self, request):
         static_redirect = StaticRedirect.objects.get_for_request(request)
         if static_redirect:
